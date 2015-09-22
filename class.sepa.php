@@ -21,7 +21,7 @@ class Sepa
 		$this->firstRow = $row;
 	}
 
-	//return the Value if Column Heading or not.
+	//return the Value if there is a Column Heading in the File.
 	function getFirstRow()
 	{
 		return $this->firstRow;
@@ -31,7 +31,7 @@ class Sepa
 	function setFileArray($file)
 	{
 		$data = file($file);
-		for( $i=0; $i < count( $data ); $i++ )
+		for( $i=0; $i < $this->getSumTransactions(); $i++ )
 		{
 			$this->file_array[$i] = explode( ";", $data[$i] );
 		}
@@ -40,6 +40,24 @@ class Sepa
 	function getFileArray()
 	{
 		return $this->file_array;
+	}
+
+	function getSumTransactions()
+	{
+		if($this->firstRow == 0 && count($this->getFileArray()) >= 1)
+		{
+			return count($this->getFileArray());
+		}
+		elseif ($this->firstRow == 1 && count($this->getFileArray()) == 1)
+		{
+			//return "First Row Parameter is 1, in the File are only 1 Row.<br> It seems that there are only the Column Heading in the File.
+			//		<br> Set First Row Parameter to 0 if there are Data at the First Row!";
+			return "0";
+		}
+		elseif ($this->firstRow == 1 && count($this->getfileArray()) > 1)
+		{
+			return count($this->getfileArray())-1;
+		}
 	}
 
 	//Returns the Control Summary of all Transactions, which are in the File
@@ -79,9 +97,9 @@ class Sepa
 		return $this->creditorID;
 	}
 
-	function setMessageID($time = time())
+	function setMessageID()
 	{
-		$this->messageID = $time;
+		$this->messageID = time();
 	}
 
 	function getMessageID()
@@ -101,22 +119,21 @@ class Sepa
 	}
 
 
-	
-		
-		$AnzTrans = count ($data); //Anzahl der Transaktionen die in der CSV Datei vorhanden sind.
-				
+
+		/*		
 		$VorKomma = substr($ControlSum, 0, -2);//nachkommastelle setzen
 		$NachKomma = substr($ControlSum, -2);//nachkommastelle setzen
 		$ControlSum = $VorKomma.".".$NachKomma;//nachkommastelle setzen
 		//$ControlSum = number_format($ControlSum, 2);
 		//$ControlSum = str_replace(",",".",$ControlSum); //SEPA Datei erwartet . anstatt ein , für die Nachkommastellen
+		
 		$Sequenz = $_POST['seq']; //Sequenz der SEPA-Lastschriften, möglich sind FRST = Erstmalig, RCUR = Wiederkehrend, OOFF = Einmalig, FNAL = letztmalig
 		$CreditorName = substr($_POST['Creditor'],0,70); //Auftraggeber Name, Kontoinhaber auf welchen Namen das Geld eingezogen wird
 		$BatchBooking = "true"; //Bei Wert "true" wird eine Sammelbuchung erstellt, bei Wert "false" werden Einzelbuchung am Kontoauszug ausgewiesen
 		$DueDate=$_POST['exDate']; //Ausführungsdatum wann die Lastschriften auf dem Konto gutgeschrieben werden sollen. WICHTIG: Muss 2 Tage später als das Tagesdatum sein
 		$CreditorNmb = substr($_POST['CreditorIban'],0,33); //Auftraggeber-Kontonummer auf welches Konto das Geld gutgeschrieben wird
 		$CreditorBic = "BYLADEM0000"; //Auftraggeber-BIC auf welche BIC/BLZ das Geld gutgeschrieben wird, muss mit der IBAN übereinstimmen
-
+		*/
 
 
 }
