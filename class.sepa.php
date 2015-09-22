@@ -8,6 +8,7 @@ class Sepa
 	private $creditorID;
 	private $messageID;
 	private $fileCreationDate;
+	private $sumTransactions;
 
 	function __construct()
 	{
@@ -21,7 +22,7 @@ class Sepa
 		$this->firstRow = $row;
 	}
 
-	//return the Value if Column Heading or not.
+	//return the Value if there is a Column Heading in the File.
 	function getFirstRow()
 	{
 		return $this->firstRow;
@@ -31,7 +32,18 @@ class Sepa
 	function setFileArray($file)
 	{
 		$data = file($file);
-		for( $i=0; $i < count( $data ); $i++ )
+		if(getFirstRow()=="1")
+		{
+			$anz = count($data)-1;
+		}
+		elseif(getFirstRow()=="0")
+		{
+			$anz = count($data)
+		}
+
+		setSumTransactions($anz);
+
+		for( $i=0; $i < getSumTransactions(); $i++ )
 		{
 			$this->file_array[$i] = explode( ";", $data[$i] );
 		}
@@ -40,6 +52,24 @@ class Sepa
 	function getFileArray()
 	{
 		return $this->file_array;
+	}
+
+	function setSumTransactions($sum)
+	{
+		if(is_numeric($sum))
+		{
+			$this->sumTransactions = $sum;	
+		}
+		else
+		{
+			$this->sumTransactions = "0";
+		}
+		
+	}
+
+	function getSumTransactions()
+	{
+		return $this->sumTransactions;
 	}
 
 	//Returns the Control Summary of all Transactions, which are in the File
