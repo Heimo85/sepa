@@ -245,6 +245,11 @@ class Sepa
 			  <ChrgBr>SLEV</ChrgBr>';
 	}
 
+	function getXMLHeader()
+	{
+		return $this->xmlHeader;
+	}
+
 
 
 		/*		

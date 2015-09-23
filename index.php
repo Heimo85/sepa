@@ -8,19 +8,17 @@ if(isset($_GET['act']))
 	{
 		$obj = new Sepa();
 		$obj->setFileArray("class.sepa.csv");
+		$obj->setMessageID();
+		$obj->setFileCreationDate();
+		$obj->setCreditorName("Max Mustermann");
+		$obj->setBatchBooking("true");
+		$obj->setSequence("RCUR");
+		$obj->setDueDate("2015-09-23");
+		$obj->setCreditorNmb("DE46ZZZ00000000001");
+		$obj->setCreditorBic("BYLADEM1FRG");
 		$obj->setFirstRow("1");
-		echo $obj->getSumTransactions();
-
-		var_dump($obj->getFileArray());
-
-		if($obj->getControlSum() == FALSE)
-		{
-			echo "keine Datei gesetzt";
-		}
-		else
-		{
-			echo $obj->getSumTransactions();
-		}
+		$obj->setXMLHeader();
+		echo $obj->getXMLHeader();
 	}
 }
 
