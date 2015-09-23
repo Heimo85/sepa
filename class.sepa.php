@@ -8,6 +8,7 @@ class Sepa
 	private $creditorID;
 	private $messageID;
 	private $fileCreationDate;
+	private $sumTransactions;
 
 	function __construct()
 	{
@@ -31,7 +32,22 @@ class Sepa
 	function setFileArray($file)
 	{
 		$data = file($file);
+<<<<<<< HEAD
 		for( $i=0; $i < $this->getSumTransactions(); $i++ )
+=======
+		if(getFirstRow()=="1")
+		{
+			$anz = count($data)-1;
+		}
+		elseif(getFirstRow()=="0")
+		{
+			$anz = count($data)
+		}
+
+		setSumTransactions($anz);
+
+		for( $i=0; $i < getSumTransactions(); $i++ )
+>>>>>>> master
 		{
 			$this->file_array[$i] = explode( ";", $data[$i] );
 		}
@@ -42,6 +58,7 @@ class Sepa
 		return $this->file_array;
 	}
 
+<<<<<<< HEAD
 	function getSumTransactions()
 	{
 		if($this->firstRow == 0 && count($this->getFileArray()) >= 1)
@@ -58,6 +75,24 @@ class Sepa
 		{
 			return count($this->getfileArray())-1;
 		}
+=======
+	function setSumTransactions($sum)
+	{
+		if(is_numeric($sum))
+		{
+			$this->sumTransactions = $sum;	
+		}
+		else
+		{
+			$this->sumTransactions = "0";
+		}
+		
+	}
+
+	function getSumTransactions()
+	{
+		return $this->sumTransactions;
+>>>>>>> master
 	}
 
 	//Returns the Control Summary of all Transactions, which are in the File
