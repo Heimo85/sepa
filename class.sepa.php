@@ -8,16 +8,28 @@ class Sepa
 	private $creditorID;
 	private $messageID;
 	private $fileCreationDate;
+	private $sequence;
+	private $creditorName;
+	private $batchBooking;
+	private $dueDate;
+	private $creditorNmb;
+	private $creditorBic;
+	private $xmlHeader;
 
 	function __construct()
 	{
 		$this->firstRow = "0";
+		$this->batchBooking = "true";
 	}
 
 	//set "0" for NO Column Heading in the first Row
 	//set "1" for Column Heading in the first Row in the *.csv File.
 	function setFirstRow($row)
-	{
+	{	
+		if($row == "1")
+		{
+			unset($this->file_array[0]);
+		}
 		$this->firstRow = $row;
 	}
 
@@ -31,7 +43,7 @@ class Sepa
 	function setFileArray($file)
 	{
 		$data = file($file);
-		for( $i=0; $i < $this->getSumTransactions(); $i++ )
+		for( $i=0; $i < count($data); $i++ )
 		{
 			$this->file_array[$i] = explode( ";", $data[$i] );
 		}
@@ -56,7 +68,7 @@ class Sepa
 		}
 		elseif ($this->firstRow == 1 && count($this->getfileArray()) > 1)
 		{
-			return count($this->getfileArray())-1;
+			return count($this->getfileArray());
 		}
 	}
 
@@ -89,7 +101,7 @@ class Sepa
 
 	function setCreditorID($cred_id)
 	{
-		$this->$creditorID=substr($cred_id,0,34); //Creditor-ID, for Germany only at the Moment
+		$this->$creditorID=substr($cred_id,0,34); //Creditor-ID, only german ID's allowed
 	}
 
 	function getCreditorID()
@@ -97,6 +109,7 @@ class Sepa
 		return $this->creditorID;
 	}
 
+	//Zeitstempel für die Nachrichten ID um Doppeleinreichungen bei der Bank zu vermeiden
 	function setMessageID()
 	{
 		$this->messageID = time();
@@ -107,15 +120,129 @@ class Sepa
 		return $this->messageID;
 	}
 
+	//Zeitstempel wann die Datei erzeugt wurde um Doppeleinreichungen bei der Bank zu vermeiden
 	function setFileCreationDate()
 	{
-		//Zeitstempel wann die Datei erzeugt wurde um Doppeleinreichungen bei der Bank zu vermeiden
 		$this->fileCreationDate=date("Y-m-d",time())."T".date("G:i:s",time())."Z"; 
 	}
 
 	function getFileCreationDate()
 	{
 		return $this->fileCreationDate;
+	}
+
+	//Sequenz der SEPA-Lastschriften, möglich sind FRST = Erstmalig, RCUR = Wiederkehrend, OOFF = Einmalig, FNAL = letztmalig
+	function setSequence($seq)
+	{
+		$this->sequence = $seq;
+	}
+
+	function getSequence()
+	{
+		return $this->sequence;
+	}
+
+	//Auftraggeber Name, Kontoinhaber auf welchen Namen das Geld eingezogen wird
+	function setCreditorName($name)
+	{
+		$this->creditorName = substr($name,0,70);
+	}
+
+	function getCreditorName()
+	{
+		return $this->creditorName;
+	}
+
+	//Bei Wert "true" wird eine Sammelbuchung erstellt, bei Wert "false" werden Einzelbuchung am Kontoauszug ausgewiesen
+	//Standardwert ist "true"
+	function setBatchBooking($batch)
+	{
+		$this->batchBooking = $batch;
+	}
+
+	function getBatchBooking()
+	{
+		return $this->batchBooking;
+	}
+
+	//Ausführungsdatum wann die Lastschriften auf dem Konto gutgeschrieben werden sollen. WICHTIG: Muss 2 Tage später als das Tagesdatum sein
+	function setDueDate($date)
+	{
+		$this->dueDate = $date;
+	}
+
+	function getDueDate()
+	{
+		return $this->dueDate;
+	}
+
+	//Auftraggeber-Kontonummer auf welches Konto das Geld gutgeschrieben wird
+	function setCreditorNmb($nmb)
+	{
+		$this->creditorNmb = $nmb;
+	}
+
+	function getCreditorNmb()
+	{
+		return $this->creditorNmb;
+	}
+
+	//Auftraggeber-BIC auf welche BIC/BLZ das Geld gutgeschrieben wird, muss mit der IBAN übereinstimmen
+	function setCreditorBic($bic)
+	{
+		$this->creditorBic = $bic;
+	}
+
+	function getCreditorBic()
+	{
+		return $this->creditorBic;
+	}
+
+	function setXMLHeader()
+	{
+		$this->xmlHeader =
+		'<?xml version="1.0" encoding="UTF-8"?>
+		<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.008.003.02" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.008.003.02 pain.008.003.02.xsd">
+		  <CstmrDrctDbtInitn>
+			<GrpHdr>
+			  <MsgId>'.$this->getMessageID().'</MsgId>
+			  <CreDtTm>'.$this->getFileCreationDate().'</CreDtTm>
+			  <NbOfTxs>'.$this->getSumTransactions().'</NbOfTxs>
+			  <CtrlSum>'.$this->getControlSum().'</CtrlSum>
+			  <InitgPty>
+				<Nm>'.$this->getCreditorName().'</Nm>
+			  </InitgPty>
+			</GrpHdr>
+			<PmtInf>
+			  <PmtInfId>'.$this->getMessageID().'</PmtInfId>
+			  <PmtMtd>DD</PmtMtd>
+			  <BtchBookg>'.$this->getBatchBooking().'</BtchBookg>
+			  <NbOfTxs>'.$this->getSumTransactions().'</NbOfTxs>
+			  <CtrlSum>'.$this->getControlSum().'</CtrlSum>
+			  <PmtTpInf>
+				<SvcLvl>
+				  <Cd>SEPA</Cd>
+				</SvcLvl>
+				<LclInstrm>
+				  <Cd>COR1</Cd>
+				</LclInstrm>
+				<SeqTp>'.$this->getSequence().'</SeqTp>
+			  </PmtTpInf>
+			  <ReqdColltnDt>'.$this->getDueDate().'</ReqdColltnDt>
+			  <Cdtr>
+				<Nm>'.$this->getCreditorName().'</Nm>
+			  </Cdtr>
+			  <CdtrAcct>
+				<Id>
+				  <IBAN>'.$this->getCreditorNmb().'</IBAN>
+				</Id>
+			  </CdtrAcct>
+			  <CdtrAgt>
+				<FinInstnId>
+				  <BIC>'.$this->getCreditorBic().'</BIC>
+				</FinInstnId>
+			  </CdtrAgt>
+			  <ChrgBr>SLEV</ChrgBr>';
 	}
 
 

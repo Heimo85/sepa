@@ -8,6 +8,9 @@ if(isset($_GET['act']))
 	{
 		$obj = new Sepa();
 		$obj->setFileArray("class.sepa.csv");
+		$obj->setFirstRow("1");
+		echo $obj->getSumTransactions();
+
 		var_dump($obj->getFileArray());
 
 		if($obj->getControlSum() == FALSE)
