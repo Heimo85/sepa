@@ -1,0 +1,19 @@
+body {
+    font-family: Arial,sans-serif;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #50505a;
+}
+
+#box2 {
+    background-color: #77C8FF;
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    text-align: center;
+    border-radius: 15px;
+}
+
+#box2:hover {
+	background-color: #FFFFFF;
+}

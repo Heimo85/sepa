@@ -18,16 +18,15 @@ if(isset($_GET['act']))
 		$obj->setCreditorBic("BYLADEM1FRG");
 		$obj->setFirstRow("1");
 		$obj->setXMLHeader();
-		echo $obj->getXMLHeader();
+		print_r($obj->getXMLHeader());
 	}
 }
-
-
 ?>
 
 <!DOCTYPE html>
 <head>
 <title>SEPA-Datei ausgeben</title>
+<link href="style.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 <form action="index.php?act=start" method="post" name="xml_create">
@@ -44,5 +43,8 @@ Sequenz:<select name="seq">
 Verwendungszweck:<input type="text" name="vwz" size="50" maxlength="140"><br><br>
 <input type="submit" value="SEPA-LS Datei erstellen" name="xml_erzeugen">
 </form>
+
+<div id="box2">1</div>
+
 </body>
 </html>
