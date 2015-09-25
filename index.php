@@ -6,6 +6,8 @@ if(isset($_GET['act']))
 {
 	if($_GET['act'] == "start")
 	{
+		$request = array_merge($_POST);
+		var_dump($request);
 		$obj = new Sepa();
 		$obj->setFileArray("class.sepa.csv");
 		$obj->setMessageID();
@@ -33,7 +35,7 @@ if(isset($_GET['act']))
 Auftraggeber: <input type="text" name="Creditor" size="40" maxlength="70" value="Test"><br><br>
 Auftraggeber-IBAN: <input type="text" name="CreditorIban" size="40" maxlength="34" value="DE50740012300000000001"><br><br>
 Gl&auml;ubiger-ID: <input type="text" name="CredId" size="30" maxlength="35" value="DE46ZZZ00000000001"><br><br>
-Ausf&uuml;hrungsdatum:<input name="exDate" type="date" value="2015-01-27"/><br><br>
+Ausf&uuml;hrungsdatum:<input name="exDate" type="date"><br><br>
 Sequenz:<select name="seq">
   <option value="FRST">Erstmalig</option>
   <option value="RCUR">Wiederkehrend</option>
