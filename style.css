@@ -6,10 +6,10 @@ body {
 }
 
 #box2 {
-    background-color: #77C8FF;
+    background-color: bla;
     width: 30px;
     height: 30px;
-    border: 1px solid black;
+    border: 1px solid #77C8FF;
     text-align: center;
     border-radius: 15px;
 }

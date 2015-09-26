@@ -14,7 +14,10 @@ class Sepa
 	private $dueDate;
 	private $creditorNmb;
 	private $creditorBic;
+	private $usage;
 	private $xmlHeader;
+	private $xmlTransactions;
+	private $xmlFooter;
 
 	function __construct()
 	{
@@ -101,7 +104,7 @@ class Sepa
 
 	function setCreditorID($cred_id)
 	{
-		$this->$creditorID=substr($cred_id,0,34); //Creditor-ID, only german ID's allowed
+		$this->creditorID=substr($cred_id,0,34); //Creditor-ID, only german ID's allowed
 	}
 
 	function getCreditorID()
@@ -165,6 +168,16 @@ class Sepa
 		return $this->batchBooking;
 	}
 
+	function setUsage($use)
+	{
+		$this->usage = htmlspecialchars($use);
+	}
+
+	function getUsage()
+	{
+		return $this->usage;
+	}
+
 	//Ausführungsdatum wann die Lastschriften auf dem Konto gutgeschrieben werden sollen. WICHTIG: Muss 2 Tage später als das Tagesdatum sein
 	function setDueDate($date)
 	{
@@ -196,6 +209,13 @@ class Sepa
 	function getCreditorBic()
 	{
 		return $this->creditorBic;
+	}
+
+	function specialChars($string)
+	{
+		$search = array("Ä", "Ö", "Ü", "ä", "ö", "ü", "ß");
+		$replace = array("Ae", "Oe", "Ue", "ae", "oe", "ue", "ss");
+		return (str_replace($search, $replace, $string));
 	}
 
 	function setXMLHeader()
@@ -248,6 +268,80 @@ class Sepa
 	function getXMLHeader()
 	{
 		return $this->xmlHeader;
+	}
+
+	function setXMLTransactions()
+	{
+		foreach($this->file_array as $line)
+		{	
+			$line[7] = str_replace(array("\r\n", "\r", "\n"), "", $line[7]);		
+			$line[4] = str_replace(",",".",$line[4]);
+			$temp = explode(".",$line[6]);
+			$line[6] = $temp[2]."-".$temp[1]."-".$temp[0]; //Datum in richtiges Format bringen
+			$line[0] = $this->specialChars($line[0]);
+			$line[1] = $this->specialChars($line[1]);
+			
+			$this->xmlTransactions .= '
+			  <DrctDbtTxInf>
+				<PmtId>
+				  <EndToEndId>'.$line[7].'</EndToEndId>
+				</PmtId>
+				<InstdAmt Ccy="EUR">'.$line[4].'</InstdAmt>
+				<DrctDbtTx>
+				  <MndtRltdInf>
+					<MndtId>'.$line[5].'</MndtId>
+					<DtOfSgntr>'.$line[6].'</DtOfSgntr>
+					<AmdmntInd>false</AmdmntInd>
+				  </MndtRltdInf>
+				  <CdtrSchmeId>
+					<Id>
+					  <PrvtId>
+						<Othr>
+						  <Id>'.$this->getCreditorID().'</Id>
+						  <SchmeNm>
+						  <Prtry>SEPA</Prtry>
+						  </SchmeNm>
+						</Othr>
+					  </PrvtId>
+					</Id>
+				  </CdtrSchmeId>
+				</DrctDbtTx>
+				<DbtrAgt>
+				  <FinInstnId>
+					<BIC>'.$line[3].'</BIC>
+				  </FinInstnId>
+				</DbtrAgt>
+				<Dbtr>
+				  <Nm>'.utf8_encode($line[0]).' '.utf8_encode($line[1]).'</Nm>
+				</Dbtr>
+				<DbtrAcct>
+				  <Id>
+					<IBAN>'.$line[2].'</IBAN>
+				  </Id>
+				</DbtrAcct>
+				<RmtInf>
+				  <Ustrd>'.$this->getUsage().'</Ustrd>
+				</RmtInf>
+			  </DrctDbtTxInf>';
+		}
+	}
+
+	function getXMLTransactions()
+	{
+		return $this->xmlTransactions;
+	}
+
+	function setXMLFooter()
+	{
+		$this->xmlFooter = "
+		</PmtInf>
+		  </CstmrDrctDbtInitn>
+		</Document>";
+	}
+
+	function getXMLFooter()
+	{
+		return $this->xmlFooter;
 	}
 
 

@@ -7,20 +7,31 @@ if(isset($_GET['act']))
 	if($_GET['act'] == "start")
 	{
 		$request = array_merge($_POST);
-		var_dump($request);
 		$obj = new Sepa();
 		$obj->setFileArray("class.sepa.csv");
 		$obj->setMessageID();
 		$obj->setFileCreationDate();
+		$obj->setCreditorID("DE65ZZZ00000123456");
 		$obj->setCreditorName("Max Mustermann");
 		$obj->setBatchBooking("true");
+		$obj->setUsage("Verwendungszweck");
 		$obj->setSequence("RCUR");
 		$obj->setDueDate("2015-09-23");
 		$obj->setCreditorNmb("DE46ZZZ00000000001");
 		$obj->setCreditorBic("BYLADEM1FRG");
 		$obj->setFirstRow("1");
 		$obj->setXMLHeader();
-		print_r($obj->getXMLHeader());
+		$obj->setXMLTransactions();
+		$obj->setXMLFooter();
+
+		$temp = $obj->getXMLHeader().$obj->getXMLTransactions().$obj->getXMLFooter();
+
+		header("Content-Type: application/force-download");
+		header("Content-Disposition: attachment; filename=\"SEPA-Lastschrift-Core1.xml\"");
+		header("Content-Length: ". strlen($temp));
+		echo $obj->getXMLHeader().$obj->getXMLTransactions().$obj->getXMLFooter();
+		exit();
+
 	}
 }
 ?>
