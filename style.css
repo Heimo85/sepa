@@ -6,14 +6,64 @@ body {
 }
 
 #box2 {
-    background-color: bla;
+    background-color: #77C8FF;
     width: 30px;
     height: 30px;
-    border: 1px solid #77C8FF;
+    border: 1px solid black;
     text-align: center;
     border-radius: 15px;
 }
 
 #box2:hover {
 	background-color: #FFFFFF;
+}
+
+.ingrediants {
+    width: 400px;
+}
+
+#drawers div { 
+    display:none;
+    text-align: left;
+    border-left: 2px solid #E61D56;
+    border-right: 2px solid #E61D56;
+    border-bottom: 2px solid #E61D56;
+    border-radius: 3px; 
+    padding: 5px;
+}
+
+#drawers div.first { 
+    display:block; 
+
+}
+
+li.draw { 
+    font-size: 12px;
+}
+
+ul.draw { 
+    list-style-type: none; 
+    text-align: center; 
+    margin: 0 0 1em 0; 
+    padding: 0; 
+}
+
+ul.draw li { 
+    background: none; 
+    margin: 1em; 
+    padding: 0; 
+}
+
+ul.draw li img { 
+    padding-top: 5px; 
+    margin: 0; 
+}
+ul.draw h5 { 
+    margin: 0; 
+    font-size: 12px; 
+    line-height: 19px; 
+    background: rgba(119,185,255,0.5); 
+    border-radius: 3px; 
+    margin: 0; 
+    cursor: pointer; 
 }
