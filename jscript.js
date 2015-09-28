@@ -3,4 +3,7 @@ $(document).ready( function() {
 	$(this).next().slideToggle();
 	$("#drawers div").not($(this).next()).slideUp();
 	});
+
+	$('#drawers').find('h5').first().next().slideToggle();
+
 });

@@ -6,19 +6,22 @@ if(isset($_GET['act']))
 {
 	if($_GET['act'] == "start")
 	{
-		$request = array_merge($_POST);
+		var_dump($_POST);
 		$obj = new Sepa();
 		$obj->setFileArray("class.sepa.csv");
 		$obj->setMessageID();
 		$obj->setFileCreationDate();
-		$obj->setCreditorID("DE65ZZZ00000123456");
-		$obj->setCreditorName("Max Mustermann");
-		$obj->setBatchBooking("true");
-		$obj->setUsage("Verwendungszweck");
-		$obj->setSequence("RCUR");
-		$obj->setDueDate("2015-09-23");
-		$obj->setCreditorNmb("DE46ZZZ00000000001");
-		$obj->setCreditorBic("BYLADEM1FRG");
+		$obj->setCreditorID($_POST["CredId"]);
+		$obj->setCreditorName($_POST["Creditor"]);
+		if(isset($_POST['batch']))
+		{
+			$obj->setBatchBooking("false");
+		}
+		$obj->setUsage($_POST["vwz"]);
+		$obj->setSequence($_POST["seq"]);
+		$obj->setDueDate($_POST["exDate"]);
+		$obj->setCreditorNmb($_POST["CreditorIban"]);
+		$obj->setCreditorBic($_POST["CreditorBIC"]);
 		$obj->setFirstRow("1");
 		$obj->setXMLHeader();
 		$obj->setXMLTransactions();
@@ -26,11 +29,13 @@ if(isset($_GET['act']))
 
 		$temp = $obj->getXMLHeader().$obj->getXMLTransactions().$obj->getXMLFooter();
 
+		/*
 		header("Content-Type: application/force-download");
 		header("Content-Disposition: attachment; filename=\"SEPA-Lastschrift-Core1.xml\"");
 		header("Content-Length: ". strlen($temp));
 		echo $obj->getXMLHeader().$obj->getXMLTransactions().$obj->getXMLFooter();
 		exit();
+		*/
 
 	}
 }
@@ -58,17 +63,22 @@ if(isset($_GET['act']))
 				<p>Auftraggeber: <input type="text" name="CreditorIban" size="40" maxlength="34" value="DE50740012300000000001"></p>
 			</div>
 		</li>
-		<li><h5>3. Gl&auml;ubiger-ID:</h5>
+		<li><h5>3. Auftraggeber-BIC:</h5>
+			<div class="first" style="display: none;">
+				<p>Auftraggeber: <input type="text" name="CreditorBIC" size="40" maxlength="34" value="BYLADEM1FRG"></p>
+			</div>
+		</li>
+		<li><h5>4. Gl&auml;ubiger-ID:</h5>
 			<div class="first" style="display: none;">
 				<p>Gl&auml;ubiger-ID: <input type="text" name="CredId" size="30" maxlength="35" value="DE46ZZZ00000000001"></p>
 			</div>
 		</li>
-		<li><h5>4. Ausf&uuml;hrungs-Datum</h5>
+		<li><h5>5. Ausf&uuml;hrungs-Datum</h5>
 			<div class="first" style="display: none;">
 				<p>Ausf&uuml;hrungsdatum:<input name="exDate" type="date"></p>
 			</div>
 		</li>
-		<li><h5>5. Ausf&uuml;hrungs-Rhythmus:</h5>
+		<li><h5>6. Ausf&uuml;hrungs-Rhythmus:</h5>
 			<div class="first" style="display: none;">
 				<p>Sequenz:
 				<select name="seq">
@@ -80,10 +90,17 @@ if(isset($_GET['act']))
 				</p>
 			</div>
 		</li>
-		<li><h5>6. Verwendungszweck</h5>
+		<li><h5>7. Verwendungszweck</h5>
 			<div class="first" style="display: none;">
 				<p>Verwendungszweck:
 				<input type="textarea" name="vwz" size="50" maxlength="140">
+				</p>
+			</div>
+		</li>
+		<li><h5>8. Sammelaufl&ouml;sung</h5>
+			<div class="first" style="display: none;">
+				<p>Sollen die Lastschriften einzeln am Konto angezeigt werden?<br>
+					<input type="checkbox" name="batch" value="false"> ja
 				</p>
 			</div>
 		</li>
