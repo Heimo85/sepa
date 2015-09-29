@@ -5,20 +5,20 @@ body {
     color: #50505a;
 }
 
-#box2 {
-    background-color: #77C8FF;
-    width: 30px;
-    height: 30px;
-    border: 1px solid black;
-    text-align: center;
-    border-radius: 15px;
+.circle {
+    width:500px;
+    height:500px;
+    border-radius:250px;
+    font-size:50px;
+    color:#fff;
+    line-height:500px;
+    text-align:center;
+    background:#000
 }
 
-#box2:hover {
-	background-color: #FFFFFF;
-}
 
-.ingrediants {
+
+.top {
     width: 400px;
 }
 
