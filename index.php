@@ -56,31 +56,31 @@ if(isset($_GET['act']))
 		<li><h5>1. Auftraggeber</h5>
 			<div class="first" style="display: none;">
 				<p>Auftraggeber: <input type="text" name="Creditor" size="40" maxlength="70" value="Test"></p>
-				<p class="weiter">weiter</p>
+				<p class="weiter" alt="weiter">&raquo;</p>
 			</div>
 		</li>
 		<li><h5>2. Auftraggeber-IBAN:</h5>
 			<div class="first" style="display: none;">
 				<p>Auftraggeber: <input type="text" name="CreditorIban" size="40" maxlength="34" value="DE50740012300000000001"></p>
-				<p class="weiter">weiter</p>
+				<p class="weiter">&raquo;</p>
 			</div>
 		</li>
 		<li><h5>3. Auftraggeber-BIC:</h5>
 			<div class="first" style="display: none;">
 				<p>Auftraggeber: <input type="text" name="CreditorBIC" size="40" maxlength="34" value="BYLADEM1FRG"></p>
-				<p class="weiter">weiter</p>
+				<p class="weiter">&raquo;</p>
 			</div>
 		</li>
 		<li><h5>4. Gl&auml;ubiger-ID:</h5>
 			<div class="first" style="display: none;">
 				<p>Gl&auml;ubiger-ID: <input type="text" name="CredId" size="30" maxlength="35" value="DE46ZZZ00000000001"></p>
-				<p class="weiter">weiter</p>
+				<p class="weiter">&raquo;</p>
 			</div>
 		</li>
 		<li><h5>5. Ausf&uuml;hrungs-Datum</h5>
 			<div class="first" style="display: none;">
 				<p>Ausf&uuml;hrungsdatum:<input name="exDate" type="date"></p>
-				<p class="weiter">weiter</p>
+				<p class="weiter">&raquo;</p>
 			</div>
 		</li>
 		<li><h5>6. Ausf&uuml;hrungs-Rhythmus:</h5>
@@ -93,7 +93,7 @@ if(isset($_GET['act']))
 				  <option value="OOFF">Einmalig</option>
 				</select>
 				</p>
-				<p class="weiter">weiter</p>
+				<p class="weiter">&raquo;</p>
 			</div>
 		</li>
 		<li><h5>7. Verwendungszweck</h5>
@@ -101,7 +101,7 @@ if(isset($_GET['act']))
 				<p>Verwendungszweck:
 				<input type="textarea" name="vwz" size="50" maxlength="140">
 				</p>
-				<p class="weiter">weiter</p>
+				<p class="weiter">&raquo;</p>
 			</div>
 		</li>
 		<li><h5>8. Sammelaufl&ouml;sung</h5>
@@ -109,7 +109,7 @@ if(isset($_GET['act']))
 				<p>Sollen die Lastschriften einzeln am Konto angezeigt werden?<br>
 					<input type="checkbox" name="batch" value="false"> ja
 				</p>
-				<p class="weiter">weiter</p>
+				<p class="weiter">&raquo;</p>
 			</div>
 		</li>
 	</ul>
@@ -117,7 +117,6 @@ if(isset($_GET['act']))
 <input type="submit" value="SEPA-LS Datei erstellen" name="xml_erzeugen">
 </form>
 
-<div class="circle">hello im a circle</div>
 
 </body>
 </html>

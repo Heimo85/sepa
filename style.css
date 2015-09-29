@@ -5,15 +5,16 @@ body {
     color: #50505a;
 }
 
-.circle {
-    width:500px;
-    height:500px;
-    border-radius:250px;
-    font-size:50px;
-    color:#fff;
-    line-height:500px;
+.weiter {
+    width:25px;
+    height:25px;
+    border-radius:12px;
+    font-size:15px;
+    color:#000;
+    line-height:23px;
     text-align:center;
-    background:#000
+    background: rgba(119,185,255,0.5); 
+    cursor: pointer;
 }
 
 
