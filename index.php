@@ -4,9 +4,9 @@ include_once("class.sepa.php");
 
 if(isset($_GET['act']))
 {
-	if($_GET['act'] == "start")
+	if($_GET['act'] == "start" && $_FILES['Datei']['name'] != "")
 	{
-		var_dump($_POST);
+		var_dump($_FILES);
 		$obj = new Sepa();
 		$obj->setFileArray("class.sepa.csv");
 		$obj->setMessageID();
@@ -38,6 +38,10 @@ if(isset($_GET['act']))
 		*/
 
 	}
+	else
+	{
+		echo "Keine Datei &Uuml;bergeben!";
+	}
 }
 ?>
 
@@ -50,7 +54,7 @@ if(isset($_GET['act']))
 </head>
 <body>
 
-<form action="index.php?act=start" method="post" name="xml_create">
+<form action="index.php?act=start" method="post" name="xml_create" enctype="multipart/form-data">
 <div class="top">
 	<ul id="drawers" class="draw">
 		<li><h5>1. Auftraggeber</h5>
@@ -108,6 +112,14 @@ if(isset($_GET['act']))
 			<div class="first" style="display: none;">
 				<p>Sollen die Lastschriften einzeln am Konto angezeigt werden?<br>
 					<input type="checkbox" name="batch" value="false"> ja
+				</p>
+				<p class="weiter">&raquo;</p>
+			</div>
+		</li>
+		<li><h5>9. Datei Upload</h5>
+			<div class="first" style="display: none;">
+				<p>Bitte Quelldatei ausw&auml;hlen (nur ".csv"):<br>
+					<input name="Datei" type="file" size="50" accept=".csv"> 
 				</p>
 				<p class="weiter">&raquo;</p>
 			</div>
