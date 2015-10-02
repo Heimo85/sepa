@@ -7,36 +7,42 @@ if(isset($_GET['act']))
 	if($_GET['act'] == "start" && $_FILES['Datei']['name'] != "")
 	{
 		var_dump($_FILES);
-		$obj = new Sepa();
-		$obj->setFileArray("class.sepa.csv");
-		$obj->setMessageID();
-		$obj->setFileCreationDate();
-		$obj->setCreditorID($_POST["CredId"]);
-		$obj->setCreditorName($_POST["Creditor"]);
-		if(isset($_POST['batch']))
+		if($_FILES['Datei']['size'] <= "1500000")
 		{
-			$obj->setBatchBooking("false");
+			$obj = new Sepa();
+			$obj->setFileArray($_FILES['Datei']['name']);
+			$obj->setMessageID();
+			$obj->setFileCreationDate();
+			$obj->setCreditorID($_POST["CredId"]);
+			$obj->setCreditorName($_POST["Creditor"]);
+			if(isset($_POST['batch']))
+			{
+				$obj->setBatchBooking("false");
+			}
+			$obj->setUsage($_POST["vwz"]);
+			$obj->setSequence($_POST["seq"]);
+			$obj->setDueDate($_POST["exDate"]);
+			$obj->setCreditorNmb($_POST["CreditorIban"]);
+			$obj->setCreditorBic($_POST["CreditorBIC"]);
+			$obj->setFirstRow("1");
+			$obj->setXMLHeader();
+			$obj->setXMLTransactions();
+			$obj->setXMLFooter();
+
+			$temp = $obj->getXMLHeader().$obj->getXMLTransactions().$obj->getXMLFooter();
+
+			/*
+			header("Content-Type: application/force-download");
+			header("Content-Disposition: attachment; filename=\"SEPA-Lastschrift-Core1.xml\"");
+			header("Content-Length: ". strlen($temp));
+			echo $obj->getXMLHeader().$obj->getXMLTransactions().$obj->getXMLFooter();
+			exit();
+			*/
 		}
-		$obj->setUsage($_POST["vwz"]);
-		$obj->setSequence($_POST["seq"]);
-		$obj->setDueDate($_POST["exDate"]);
-		$obj->setCreditorNmb($_POST["CreditorIban"]);
-		$obj->setCreditorBic($_POST["CreditorBIC"]);
-		$obj->setFirstRow("1");
-		$obj->setXMLHeader();
-		$obj->setXMLTransactions();
-		$obj->setXMLFooter();
-
-		$temp = $obj->getXMLHeader().$obj->getXMLTransactions().$obj->getXMLFooter();
-
-		/*
-		header("Content-Type: application/force-download");
-		header("Content-Disposition: attachment; filename=\"SEPA-Lastschrift-Core1.xml\"");
-		header("Content-Length: ". strlen($temp));
-		echo $obj->getXMLHeader().$obj->getXMLTransactions().$obj->getXMLFooter();
-		exit();
-		*/
-
+		else
+		{
+			echo "Hochgeladene Datei zu groß! Datei muss kleiner als 1,5 Megabyte sein!";
+		}
 	}
 	else
 	{
