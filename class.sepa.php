@@ -3,6 +3,8 @@
 class Sepa
 {
 	private $file_array = array();
+	private $uploadDir = "uploads/";
+	private $uploadFile;
 	private $firstRow;
 	private $controlSum;
 	private $creditorID;
@@ -42,14 +44,24 @@ class Sepa
 		return $this->firstRow;
 	}
 
+	//move the uploaded file into the uploads
 	//open the *.cvs File and put it into an 2 dimensional array.
-	function setFileArray($file)
+	function setFileArray($file, $name)
 	{
-		$data = file($file);
-		for( $i=0; $i < count($data); $i++ )
+		$tmp = $this->uploadDir.$name;
+		if(move_uploaded_file($file, $tmp))
 		{
-			$this->file_array[$i] = explode( ";", $data[$i] );
+			$data = file($tmp);
+			for( $i=0; $i < count($data); $i++ )
+			{
+				$this->file_array[$i] = explode( ";", $data[$i] );
+			}
 		}
+		else
+		{
+			$this->file_array = '';
+		}
+		
 	}
 
 	function getFileArray()
@@ -170,7 +182,14 @@ class Sepa
 
 	function setUsage($use)
 	{
-		$this->usage = htmlspecialchars($use);
+		if(!empty($use))
+		{
+			$this->usage = htmlspecialchars($use);	
+		}
+		else
+		{
+			$this->usage = "NO-DATA";
+		}
 	}
 
 	function getUsage()
@@ -181,7 +200,16 @@ class Sepa
 	//Ausführungsdatum wann die Lastschriften auf dem Konto gutgeschrieben werden sollen. WICHTIG: Muss 2 Tage später als das Tagesdatum sein
 	function setDueDate($date)
 	{
-		$this->dueDate = $date;
+		if(!empty($date))
+		{
+			$this->dueDate = $date;
+		}
+		else
+		{
+			$tmpTime = time() + 172800;
+			$this->dueDate = date("Y-m-d", $tmpTime);
+		}
+		
 	}
 
 	function getDueDate()

@@ -6,11 +6,11 @@ if(isset($_GET['act']))
 {
 	if($_GET['act'] == "start" && $_FILES['Datei']['name'] != "")
 	{
-		var_dump($_FILES);
+		//var_dump($_FILES);
 		if($_FILES['Datei']['size'] <= "1500000")
 		{
 			$obj = new Sepa();
-			$obj->setFileArray($_FILES['Datei']['name']);
+			$obj->setFileArray($_FILES['Datei']['tmp_name'],$_FILES['Datei']['name']);
 			$obj->setMessageID();
 			$obj->setFileCreationDate();
 			$obj->setCreditorID($_POST["CredId"]);
@@ -31,13 +31,13 @@ if(isset($_GET['act']))
 
 			$temp = $obj->getXMLHeader().$obj->getXMLTransactions().$obj->getXMLFooter();
 
-			/*
+			
 			header("Content-Type: application/force-download");
 			header("Content-Disposition: attachment; filename=\"SEPA-Lastschrift-Core1.xml\"");
 			header("Content-Length: ". strlen($temp));
 			echo $obj->getXMLHeader().$obj->getXMLTransactions().$obj->getXMLFooter();
 			exit();
-			*/
+			
 		}
 		else
 		{
