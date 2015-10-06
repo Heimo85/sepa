@@ -3,7 +3,7 @@
 class Sepa
 {
 	private $file_array = array();
-	private $uploadDir = "uploads/";
+	private $uploadDir = "uploads";
 	private $uploadFile;
 	private $firstRow;
 	private $controlSum;
@@ -25,6 +25,10 @@ class Sepa
 	{
 		$this->firstRow = "0";
 		$this->batchBooking = "true";
+		if(file_exists($this->uploadDir) === FALSE)
+		{
+			mkdir($this->uploadDir);
+		}
 	}
 
 	//set "0" for NO Column Heading in the first Row
@@ -48,7 +52,7 @@ class Sepa
 	//open the *.cvs File and put it into an 2 dimensional array.
 	function setFileArray($file, $name)
 	{
-		$tmp = $this->uploadDir.$name;
+		$tmp = $this->uploadDir.'/'.$name;
 		if(move_uploaded_file($file, $tmp))
 		{
 			$data = file($tmp);
