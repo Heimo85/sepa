@@ -66,13 +66,13 @@ if(isset($_GET['act']))
 		<li><h5>1. Auftraggeber</h5>
 			<div class="first" style="display: none;">
 				<p>Auftraggeber: <input type="text" name="Creditor" size="40" maxlength="70" value="Test"></p>
-				<p class="weiter" alt="weiter">&raquo;</p>
+				<input type="button" id="weiter" value="&raquo; Step 2">
 			</div>
 		</li>
 		<li><h5>2. Auftraggeber-IBAN:</h5>
 			<div class="first" style="display: none;">
 				<p>Auftraggeber: <input type="text" name="CreditorIban" size="40" maxlength="34" value="DE50740012300000000001"></p>
-				<p class="weiter">&raquo;</p>
+				<input type="button" id="weiter" value="&raquo; Step 2">
 			</div>
 		</li>
 		<li><h5>3. Auftraggeber-BIC:</h5>
